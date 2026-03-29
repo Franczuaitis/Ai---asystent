@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Asystent — Demo</title>
+<title>Replai — Demo</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -21,11 +21,11 @@ body{font-family:'Inter',sans-serif;background:#0f0f18;color:#f0f0f8;min-height:
 .msg.user .bub{background:rgba(124,111,255,.15);border-color:rgba(124,111,255,.25);border-radius:12px 12px 4px 12px;}
 .chat-footer{padding:12px;border-top:1px solid #252535;display:flex;gap:8px;}
 .chat-footer input{flex:1;background:#181825;border:1px solid #252535;border-radius:8px;padding:10px 12px;color:#f0f0f8;font-family:'Inter',sans-serif;font-size:13px;}
-.chat-footer input:focus{outline:none;border-color:#7c6fff;}
-.send-btn{background:#7c6fff;color:white;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-weight:600;}
+.chat-footer input:focus{outline:none;border-color:#00e87a;}
+.send-btn{background:#00e87a;color:white;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-weight:600;}
 .powered{text-align:center;margin-top:12px;font-size:11px;color:#555570;}
 .dots{display:inline-flex;gap:3px;}
-.dot{width:5px;height:5px;border-radius:50%;background:#7c6fff;animation:dp 1.2s infinite;}
+.dot{width:5px;height:5px;border-radius:50%;background:#00e87a;animation:dp 1.2s infinite;}
 .dot:nth-child(2){animation-delay:.2s;}
 .dot:nth-child(3){animation-delay:.4s;}
 @keyframes dp{0%,80%,100%{opacity:.3;transform:scale(.7);}40%{opacity:1;transform:scale(1);}}
@@ -36,8 +36,8 @@ body{font-family:'Inter',sans-serif;background:#0f0f18;color:#f0f0f8;min-height:
 <body>
 <div class="demo-wrap">
   <div class="demo-header">
-    <h1>🤖 AI Asystent</h1>
-    <p id="firm-title">Wirtualny asystent obsługi klienta</p>
+    <h1>💬 Replai</h1>
+    <p id="firm-title">Powered by Replai AI</p>
   </div>
   <div class="chat-box">
     <div class="chat-messages" id="chat">
@@ -48,7 +48,7 @@ body{font-family:'Inter',sans-serif;background:#0f0f18;color:#f0f0f8;min-height:
       <button class="send-btn" onclick="send()">➤</button>
     </div>
   </div>
-  <div class="powered">Powered by <strong>AI Asystent</strong> · aiasystent.pl</div>
+  <div class="powered">Powered by <strong>Replai</strong> · replai.pl</div>
 </div>
 <script>
 async function init(){

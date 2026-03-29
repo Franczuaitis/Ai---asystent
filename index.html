@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#6c63ff">
+<meta name="theme-color" content="#00e87a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AIAsystent">
+<meta name="apple-mobile-web-app-title" content="Replai">
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icon-192.svg">
-<title>AI Asystent</title>
+<title>Replai</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root {
-  --bg:#080810;--surface:#10101a;--surface2:#181825;--surface3:#20202f;
-  --border:#252535;--accent:#7c6fff;--accent2:#ff6b8a;--accent3:#00d4aa;
+  --bg:#050508;--surface:#0d0d12;--surface2:#14141c;--surface3:#1a1a24;
+  --border:#1e1e2a;--accent:#00e87a;--accent2:#00c4a0;--accent3:#7fff00;
   --text:#f0f0f8;--text2:#8888aa;--text3:#555570;
-  --success:#00d4aa;--warning:#ffb547;--error:#ff6b8a;
+  --success:#00e87a;--warning:#ffb547;--error:#ff6b8a;
   --radius:14px;--radius-sm:8px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -37,11 +37,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .topbar-right{display:flex;align-items:center;gap:8px;}
 .lang-btn{padding:5px 10px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
 .lang-btn:hover,.lang-btn.active{background:rgba(124,111,255,.15);border-color:var(--accent);color:var(--accent);}
-.install-btn{padding:6px 12px;border-radius:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-size:12px;font-weight:600;cursor:pointer;border:none;display:none;}
+.install-btn{padding:6px 12px;border-radius:20px;background:linear-gradient(135deg,#00e87a,#00c4a0);color:white;font-size:12px;font-weight:600;cursor:pointer;border:none;display:none;}
 
 /* LOGO */
 .logo{display:flex;align-items:center;gap:10px;padding:4px 8px 16px;border-bottom:1px solid var(--border);margin-bottom:8px;}
-.logo-icon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.logo-icon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#00e87a,#00c4a0);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
 .logo-text{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;}
 .logo-text span{color:var(--accent);}
 
@@ -93,7 +93,7 @@ select option{background:var(--surface2);}
 
 /* BUTTONS */
 .btn{padding:9px 18px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s;border:none;display:inline-flex;align-items:center;gap:6px;}
-.btn-primary{background:linear-gradient(135deg,var(--accent),#6058e0);color:white;}
+.btn-primary{background:linear-gradient(135deg,#00e87a,#00b868);color:white;}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(124,111,255,.4);}
 .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
 .btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
@@ -208,8 +208,8 @@ tr:hover td{background:var(--surface2);}
   <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
     <div class="logo">
-      <div class="logo-icon">🤖</div>
-      <div class="logo-text">AI<span>Asystent</span></div>
+      <div class="logo-icon" style="font-size:20px">💬</div>
+      <div class="logo-text">Re<span>plai</span></div>
     </div>
     <div class="nav-section" data-i18n="nav.panel">Panel</div>
     <button class="nav-item active" onclick="nav('dashboard',this)"><span class="icon">📊</span><span data-i18n="nav.dashboard">Dashboard</span></button>

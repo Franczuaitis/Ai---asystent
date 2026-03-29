@@ -216,4 +216,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`AI Asystent działa na porcie ${PORT}`));
 
 // Demo page route
-app.get('/demo', (req, res) => res.sendFile(__dirname + '/demo.html'));
+app.get('/demo', (req, res) => res.sendFile(__dirname + '/public/demo.html'));
