@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Asystent — Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#0f0f18;color:#f0f0f8;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+.demo-wrap{width:100%;max-width:420px;}
+.demo-header{text-align:center;margin-bottom:24px;}
+.demo-header h1{font-size:22px;font-weight:700;margin-bottom:6px;}
+.demo-header p{font-size:13px;color:#8888aa;}
+.chat-box{background:#10101a;border:1px solid #252535;border-radius:16px;overflow:hidden;}
+.chat-messages{padding:16px;height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
+.msg{display:flex;gap:8px;align-items:flex-end;}
+.msg.user{flex-direction:row-reverse;}
+.av{width:30px;height:30px;border-radius:50%;background:#20202f;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.bub{background:#181825;border:1px solid #252535;border-radius:12px 12px 12px 4px;padding:9px 13px;font-size:13px;line-height:1.5;max-width:80%;}
+.msg.user .bub{background:rgba(124,111,255,.15);border-color:rgba(124,111,255,.25);border-radius:12px 12px 4px 12px;}
+.chat-footer{padding:12px;border-top:1px solid #252535;display:flex;gap:8px;}
+.chat-footer input{flex:1;background:#181825;border:1px solid #252535;border-radius:8px;padding:10px 12px;color:#f0f0f8;font-family:'Inter',sans-serif;font-size:13px;}
+.chat-footer input:focus{outline:none;border-color:#7c6fff;}
+.send-btn{background:#7c6fff;color:white;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;font-weight:600;}
+.powered{text-align:center;margin-top:12px;font-size:11px;color:#555570;}
+.dots{display:inline-flex;gap:3px;}
+.dot{width:5px;height:5px;border-radius:50%;background:#7c6fff;animation:dp 1.2s infinite;}
+.dot:nth-child(2){animation-delay:.2s;}
+.dot:nth-child(3){animation-delay:.4s;}
+@keyframes dp{0%,80%,100%{opacity:.3;transform:scale(.7);}40%{opacity:1;transform:scale(1);}}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:#252535;border-radius:2px;}
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="demo-header">
+    <h1>🤖 AI Asystent</h1>
+    <p id="firm-title">Wirtualny asystent obsługi klienta</p>
+  </div>
+  <div class="chat-box">
+    <div class="chat-messages" id="chat">
+      <div class="msg"><div class="av">🤖</div><div class="bub" id="welcome-msg">Cześć! Jestem asystentem tej firmy. W czym mogę pomóc? 😊</div></div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="inp" placeholder="Napisz pytanie..." onkeydown="if(event.key==='Enter')send()">
+      <button class="send-btn" onclick="send()">➤</button>
+    </div>
+  </div>
+  <div class="powered">Powered by <strong>AI Asystent</strong> · aiasystent.pl</div>
+</div>
+<script>
+async function init(){
+  try{
+    const r=await fetch('/api/config/default');
+    const c=await r.json();
+    if(c.name){
+      document.getElementById('firm-title').textContent=c.name+' · Asystent AI';
+      document.getElementById('welcome-msg').innerHTML='Cześć! Jestem asystentem firmy <strong>'+c.name+'</strong>. W czym mogę pomóc? 😊';
+    }
+  }catch(e){}
+}
+init();
+
+async function send(){
+  const inp=document.getElementById('inp');
+  const msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  addMsg(msg,'user');
+  const tid='t'+Date.now();
+  document.getElementById('chat').innerHTML+=`<div class="msg" id="${tid}"><div class="av">🤖</div><div class="bub"><div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div></div>`;
+  scroll();
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,configId:'default',history:[]})});
+    const d=await r.json();
+    document.getElementById(tid)?.remove();
+    addMsg(d.reply||'Dziękuję za wiadomość!','bot');
+  }catch(e){
+    document.getElementById(tid)?.remove();
+    addMsg('Przepraszam, spróbuj ponownie.','bot');
+  }
+}
+function addMsg(text,who){
+  const c=document.getElementById('chat');
+  const isUser=who==='user';
+  c.innerHTML+=`<div class="msg ${isUser?'user':''}"><div class="av">${isUser?'👤':'🤖'}</div><div class="bub">${text.replace(/\n/g,'<br>')}</div></div>`;
+  scroll();
+}
+function scroll(){const c=document.getElementById('chat');c.scrollTop=c.scrollHeight;}
+</script>
+</body>
+</html>

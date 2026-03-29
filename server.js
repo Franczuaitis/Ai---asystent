@@ -212,6 +212,8 @@ async function sendFacebookMessage(recipientId, text, pageToken) {
 }
 
 // === START ===
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`AI Asystent działa na porcie ${PORT}`));
 
+// Demo page route
+app.get('/demo', (req, res) => res.sendFile(__dirname + '/public/demo.html'));
