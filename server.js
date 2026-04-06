@@ -1,136 +1,221 @@
 const express = require('express');
-const cors = require('cors');
-const path = require('path');
 const https = require('https');
+const path = require('path');
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
-// === SERP API HELPER ===
-function serpRequest(params) {
+// === CONFIG ===
+const SERP_KEY = process.env.SERP_API_KEY;
+const SUPA_URL = process.env.SUPABASE_URL;
+const SUPA_KEY = process.env.SUPABASE_KEY;
+
+// === HELPERS ===
+function httpGet(url) {
   return new Promise((resolve, reject) => {
-    const query = new URLSearchParams({
-      ...params,
-      api_key: process.env.SERP_API_KEY,
-    });
-    const url = `https://serpapi.com/search.json?${query}`;
     https.get(url, (res) => {
       let data = '';
-      res.on('data', chunk => data += chunk);
+      res.on('data', c => data += c);
       res.on('end', () => {
         try { resolve(JSON.parse(data)); }
-        catch (e) { reject(e); }
+        catch(e) { reject(e); }
       });
     }).on('error', reject);
   });
 }
 
-// === API: Szukaj produktów z prawdziwymi cenami ===
+function supaFetch(path, options = {}) {
+  return new Promise((resolve, reject) => {
+    const url = new URL(SUPA_URL + path);
+    const opts = {
+      method: options.method || 'GET',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': options.prefer || 'return=minimal',
+        ...options.headers,
+      },
+    };
+    const req = https.request(url, opts, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try { resolve(data ? JSON.parse(data) : {}); }
+        catch(e) { resolve({}); }
+      });
+    });
+    req.on('error', reject);
+    if (options.body) req.write(JSON.stringify(options.body));
+    req.end();
+  });
+}
+
+// === SERP API ===
+function serpSearch(query, extra = {}) {
+  const params = new URLSearchParams({
+    engine: 'google_shopping',
+    q: query,
+    gl: 'us',
+    hl: 'en',
+    num: 20,
+    api_key: SERP_KEY,
+    ...extra,
+  });
+  return httpGet(`https://serpapi.com/search.json?${params}`);
+}
+
+// === SCAN & SAVE DEALS ===
+const SCAN_QUERIES = [
+  { query: 'electronics deals discount', cat: 'electronics' },
+  { query: 'nike adidas shoes sale', cat: 'fashion' },
+  { query: 'home appliances deals', cat: 'home' },
+  { query: 'gaming console sale', cat: 'gaming' },
+  { query: 'sports equipment discount', cat: 'sports' },
+  { query: 'beauty skincare sale', cat: 'beauty' },
+  { query: 'books bestseller deals', cat: 'books' },
+];
+
+async function scanAndSave() {
+  console.log('[SCAN] Starting deals scan...');
+  if (!SERP_KEY || !SUPA_URL || !SUPA_KEY) {
+    console.log('[SCAN] Missing API keys, skipping scan');
+    return;
+  }
+
+  for (const { query, cat } of SCAN_QUERIES) {
+    try {
+      console.log(`[SCAN] Scanning: ${query}`);
+      const data = await serpSearch(query);
+      const items = (data.shopping_results || [])
+        .filter(item => item.link && item.price)
+        .map(item => ({
+          name: item.title,
+          store: item.source,
+          price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+          image: item.thumbnail || null,
+          link: item.link,
+          rating: item.rating ? parseFloat(item.rating) : null,
+          category: cat,
+          tag: item.tag || null,
+          found_at: new Date().toISOString(),
+        }))
+        .filter(i => i.price > 0)
+        .slice(0, 10);
+
+      if (items.length > 0) {
+        // Delete old deals for this category
+        await supaFetch(
+          `/rest/v1/deals?category=eq.${cat}&found_at=lt.${new Date(Date.now() - 12*60*60*1000).toISOString()}`,
+          { method: 'DELETE' }
+        );
+        // Insert new deals
+        await supaFetch('/rest/v1/deals', {
+          method: 'POST',
+          body: items,
+          prefer: 'return=minimal',
+        });
+        console.log(`[SCAN] Saved ${items.length} deals for ${cat}`);
+      }
+
+      // Wait 2s between requests to avoid rate limiting
+      await new Promise(r => setTimeout(r, 2000));
+    } catch (err) {
+      console.error(`[SCAN] Error scanning ${cat}:`, err.message);
+    }
+  }
+  console.log('[SCAN] Done.');
+}
+
+// === CRON: run every 6 hours ===
+const SIX_HOURS = 6 * 60 * 60 * 1000;
+scanAndSave(); // run on startup
+setInterval(scanAndSave, SIX_HOURS);
+
+// === API: Get deals from Supabase ===
+app.get('/api/deals', async (req, res) => {
+  const cat = req.query.cat || 'all';
+  try {
+    let url = `/rest/v1/deals?select=*&order=found_at.desc&limit=20`;
+    if (cat !== 'all') url += `&category=eq.${cat}`;
+
+    const data = await supaFetch(url, {
+      headers: { 'Range': '0-19' }
+    });
+
+    res.json({ results: Array.isArray(data) ? data : [] });
+  } catch (err) {
+    console.error('Deals error:', err.message);
+    res.json({ results: [] });
+  }
+});
+
+// === API: Search live via SerpApi ===
 app.get('/api/search', async (req, res) => {
-  const { q } = req.query;
+  const q = req.query.q;
   if (!q) return res.json({ results: [] });
 
   try {
-    const data = await serpRequest({
-      engine: 'google_shopping',
-      q: q,
-      gl: 'us',
-      hl: 'en',
-      num: 20,
-    });
-
-    const results = (data.shopping_results || []).map(item => ({
-      id: item.position,
-      name: item.title,
-      store: item.source,
-      price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
-      was: parseFloat(item.extracted_price) || null,
-      drop: item.tag ? parseInt(item.tag) : null,
-      image: item.thumbnail,
-      link: item.link || item.product_link,
-      rating: item.rating || null,
-      reviews: item.reviews || null,
-    })).filter(r => r.price > 0);
-
-    res.json({ results, query: q });
-  } catch (err) {
-    console.error('SerpApi error:', err.message);
-    res.status(500).json({ error: 'Search failed', results: [] });
-  }
-});
-
-// === API: Hot deals — najlepsze przeceny ===
-app.get('/api/deals', async (req, res) => {
-  const { cat = 'electronics deals' } = req.query;
-
-  try {
-    const data = await serpRequest({
-      engine: 'google_shopping',
-      q: cat,
-      gl: 'us',
-      hl: 'en',
-      tbs: 'p_ord:rv',
-      num: 20,
-    });
-
-    const results = (data.shopping_results || []).map(item => ({
-      id: item.position,
-      name: item.title,
-      store: item.source,
-      price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
-      image: item.thumbnail,
-      link: item.link || item.product_link,
-      rating: item.rating || null,
-      tag: item.tag || null,
-    })).filter(r => r.price > 0).slice(0, 12);
+    const data = await serpSearch(q);
+    const results = (data.shopping_results || [])
+      .filter(item => item.link && item.price)
+      .map((item, i) => ({
+        id: i,
+        name: item.title,
+        store: item.source,
+        price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+        image: item.thumbnail || null,
+        link: item.link,
+        rating: item.rating ? parseFloat(item.rating) : null,
+        tag: item.tag || null,
+      }))
+      .filter(r => r.price > 0);
 
     res.json({ results });
   } catch (err) {
-    console.error('SerpApi deals error:', err.message);
-    res.status(500).json({ error: 'Failed to fetch deals', results: [] });
+    console.error('Search error:', err.message);
+    res.json({ results: [], error: 'Search failed' });
   }
 });
 
-// === API: Porównaj ceny dla konkretnego produktu ===
+// === API: Compare prices for a product ===
 app.get('/api/compare', async (req, res) => {
-  const { q } = req.query;
+  const q = req.query.q;
   if (!q) return res.json({ stores: [] });
 
   try {
-    const data = await serpRequest({
-      engine: 'google_shopping',
-      q: q,
-      gl: 'us',
-      hl: 'en',
-      num: 10,
-    });
-
-    const stores = (data.shopping_results || []).map(item => ({
-      name: item.source,
-      price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
-      link: item.link || item.product_link,
-      shipping: item.delivery || 'Check store',
-      rating: item.rating || null,
-      image: item.thumbnail,
-    }))
-    .filter(r => r.price > 0)
-    .sort((a, b) => a.price - b.price)
-    .slice(0, 5);
+    const data = await serpSearch(q, { num: 10 });
+    const stores = (data.shopping_results || [])
+      .filter(item => item.link && item.price)
+      .map(item => ({
+        name: item.source,
+        price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+        link: item.link,
+        shipping: item.delivery || 'Check store',
+        rating: item.rating ? parseFloat(item.rating) : null,
+        image: item.thumbnail || null,
+      }))
+      .filter(r => r.price > 0)
+      .sort((a, b) => a.price - b.price)
+      .slice(0, 5);
 
     if (stores.length > 0) stores[0].best = true;
-
-    res.json({ stores, query: q });
+    res.json({ stores });
   } catch (err) {
-    console.error('SerpApi compare error:', err.message);
-    res.status(500).json({ error: 'Compare failed', stores: [] });
+    console.error('Compare error:', err.message);
+    res.json({ stores: [], error: 'Compare failed' });
   }
 });
 
-// Health check
-app.get('/health', (req, res) => res.json({ ok: true, app: 'PriceHunt' }));
+// === Health check ===
+app.get('/health', (req, res) => res.json({
+  ok: true,
+  app: 'PriceHunt',
+  serp: !!SERP_KEY,
+  supabase: !!SUPA_URL,
+}));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`PriceHunt running on port ${PORT}`));
