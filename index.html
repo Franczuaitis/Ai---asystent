@@ -1,839 +1,504 @@
+
 <!DOCTYPE html>
-<html lang="pl" id="html">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#00e87a">
+<meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Replai">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PriceHunt">
 <link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/icon-192.svg">
-<title>Replai</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="apple-touch-icon" href="/icon.svg">
+<title>PriceHunt</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#050508;--surface:#0d0d12;--surface2:#14141c;--surface3:#1a1a24;
-  --border:#1e1e2a;--accent:#00e87a;--accent2:#00c4a0;--accent3:#7fff00;
-  --text:#f0f0f8;--text2:#8888aa;--text3:#555570;
-  --success:#00e87a;--warning:#ffb547;--error:#ff6b8a;
-  --radius:14px;--radius-sm:8px;
-}
+:root{--bg:#fafaf8;--s:#ffffff;--s2:#f4f4f0;--b:rgba(0,0,0,0.08);--b2:rgba(0,0,0,0.14);--t:#111110;--t2:#6b6b68;--t3:#a8a8a5;--green:#2d6a4f;--red:#c0392b;--blue:#1a6fad;--r:16px;--rsm:10px;--sh:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);--shm:0 4px 16px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;}
-
-/* LAYOUT */
-.app{display:flex;height:100vh;height:100dvh;}
-.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 10px;gap:2px;flex-shrink:0;transition:transform .25s ease;z-index:100;}
-.main{flex:1;overflow-y:auto;overflow-x:hidden;}
-
-/* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:10;gap:12px;}
-.topbar-left{display:flex;align-items:center;gap:10px;}
-.hamburger{display:none;width:36px;height:36px;border-radius:var(--radius-sm);background:var(--surface2);border:1px solid var(--border);align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0;}
-.topbar h2{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;}
-.topbar-right{display:flex;align-items:center;gap:8px;}
-.lang-btn{padding:5px 10px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
-.lang-btn:hover,.lang-btn.active{background:rgba(124,111,255,.15);border-color:var(--accent);color:var(--accent);}
-.install-btn{padding:6px 12px;border-radius:20px;background:linear-gradient(135deg,#00e87a,#00c4a0);color:white;font-size:12px;font-weight:600;cursor:pointer;border:none;display:none;}
-
-/* LOGO */
-.logo{display:flex;align-items:center;gap:10px;padding:4px 8px 16px;border-bottom:1px solid var(--border);margin-bottom:8px;}
-.logo-icon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#00e87a,#00c4a0);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.logo-text{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;}
-.logo-text span{color:var(--accent);}
-
-/* NAV */
-.nav-section{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;padding:10px 8px 4px;margin-top:4px;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:all .15s;border:none;background:none;width:100%;text-align:left;}
-.nav-item:hover{background:var(--surface2);color:var(--text);}
-.nav-item.active{background:rgba(124,111,255,.12);color:var(--accent);}
-.nav-item .icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
-.nav-badge{margin-left:auto;background:var(--accent2);color:white;font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;}
-
-/* PAGES */
-.page{display:none;padding:24px;animation:fadeIn .2s ease;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-size:15px;}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
+.topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:rgba(250,250,248,0.92);border-bottom:1px solid var(--b);flex-shrink:0;backdrop-filter:blur(20px);}
+.logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--t);flex-shrink:0;letter-spacing:-0.3px;}
+.logo em{font-style:italic;color:var(--t2);}
+.sw{flex:1;position:relative;}
+.sw input{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:12px;padding:10px 16px 10px 40px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s,background .2s;}
+.sw input:focus{border-color:var(--b2);background:var(--s);}
+.sw input::placeholder{color:var(--t3);}
+.si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none;}
+.sbtn{background:var(--t);border:none;border-radius:10px;padding:10px 18px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;cursor:pointer;flex-shrink:0;transition:opacity .15s;}
+.sbtn:active{opacity:0.75;}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.content::-webkit-scrollbar{display:none;}
+.bottomnav{display:flex;background:rgba(250,250,248,0.95);border-top:1px solid var(--b);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(20px);}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;border:none;background:none;color:var(--t3);cursor:pointer;font-size:10px;font-family:'DM Sans',sans-serif;font-weight:500;transition:color .15s;}
+.nb.active{color:var(--t);}
+.ni{font-size:20px;line-height:1;}
+.page{display:none;padding:20px;animation:fu .2s ease;}
 .page.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-
-/* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
-.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:14px;display:flex;align-items:center;gap:8px;justify-content:space-between;}
-.card-title-left{display:flex;align-items:center;gap:8px;}
-.badge{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(124,111,255,.15);color:var(--accent);font-weight:600;}
-.badge-green{background:rgba(0,212,170,.15);color:var(--success);}
-.badge-red{background:rgba(255,107,138,.15);color:var(--error);}
-
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;overflow:hidden;}
-.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
-.stat-value{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin:6px 0 2px;}
-.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
-.stat-change{font-size:11px;margin-top:6px;display:flex;align-items:center;gap:4px;}
-.stat-change.up{color:var(--success);}
-.stat-change.down{color:var(--error);}
-
-/* STATUS */
-.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;}
-.status-dot{width:7px;height:7px;border-radius:50%;}
-.status-dot.green{background:var(--success);box-shadow:0 0 0 3px rgba(0,212,170,.2);animation:pulse 2s infinite;}
-.status-dot.yellow{background:var(--warning);}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
-
-/* FORMS */
-.form-group{margin-bottom:14px;}
-label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
-input,textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;transition:border-color .15s;resize:vertical;}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,111,255,.12);}
-textarea{min-height:80px;}
-select option{background:var(--surface2);}
-
-/* BUTTONS */
-.btn{padding:9px 18px;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all .15s;border:none;display:inline-flex;align-items:center;gap:6px;}
-.btn-primary{background:linear-gradient(135deg,#00e87a,#00b868);color:white;}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(124,111,255,.4);}
-.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
-.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
-.btn-success{background:rgba(0,212,170,.12);color:var(--success);border:1px solid rgba(0,212,170,.3);}
-.btn-danger{background:rgba(255,107,138,.12);color:var(--error);border:1px solid rgba(255,107,138,.3);}
-.btn-full{width:100%;justify-content:center;padding:12px;}
-
-/* GRIDS */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-
-/* CHAT */
-.chat-wrap{background:var(--surface2);border-radius:var(--radius);padding:14px;height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
-.chat-msg{display:flex;gap:8px;align-items:flex-end;}
-.chat-msg.user{flex-direction:row-reverse;}
-.chat-av{width:28px;height:28px;border-radius:50%;background:var(--surface3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
-.chat-msg.user .chat-av{background:rgba(124,111,255,.2);}
-.chat-bub{background:var(--surface);border:1px solid var(--border);border-radius:12px 12px 12px 4px;padding:9px 13px;font-size:13px;line-height:1.5;max-width:78%;}
-.chat-msg.user .chat-bub{background:rgba(124,111,255,.15);border-color:rgba(124,111,255,.25);border-radius:12px 12px 4px 12px;}
-.chat-input-row{display:flex;gap:8px;margin-top:10px;}
-.chat-input-row input{flex:1;}
-
-/* TOGGLE */
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);}
-.toggle-row:last-child{border:none;padding-bottom:0;}
-.toggle-info h4{font-size:13px;font-weight:500;}
-.toggle-info p{font-size:11px;color:var(--text2);margin-top:2px;}
-.toggle{position:relative;width:42px;height:22px;background:var(--border);border-radius:11px;cursor:pointer;transition:background .2s;flex-shrink:0;}
-.toggle.on{background:var(--accent);}
-.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:white;transition:left .2s;}
-.toggle.on::after{left:23px;}
-
-/* TABLE */
-.table-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:12px;}
-th{text-align:left;padding:9px 12px;color:var(--text2);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;}
-td{padding:9px 12px;border-bottom:1px solid var(--border);}
-tr:last-child td{border:none;}
-tr:hover td{background:var(--surface2);}
-
-/* TAGS */
-.tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
-.tag-green{background:rgba(0,212,170,.12);color:var(--success);}
-.tag-purple{background:rgba(124,111,255,.12);color:var(--accent);}
-.tag-red{background:rgba(255,107,138,.12);color:var(--error);}
-.tag-yellow{background:rgba(255,181,71,.12);color:var(--warning);}
-
-/* NOTICE */
-.notice{background:rgba(124,111,255,.08);border:1px solid rgba(124,111,255,.2);border-radius:var(--radius-sm);padding:11px 14px;font-size:12px;color:var(--text2);display:flex;gap:10px;margin-bottom:14px;line-height:1.5;}
-.notice-warn{background:rgba(255,181,71,.08);border-color:rgba(255,181,71,.2);color:var(--warning);}
-.notice-success{background:rgba(0,212,170,.08);border-color:rgba(0,212,170,.2);color:var(--success);}
-
-/* TEMPLATES */
-.template-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.template-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:all .15s;}
-.template-card:hover{border-color:var(--accent);background:rgba(124,111,255,.06);}
-.template-card h4{font-size:12px;font-weight:600;margin-bottom:4px;}
-.template-card p{font-size:11px;color:var(--text2);line-height:1.4;}
-
-/* CHART */
-.chart-container{position:relative;height:200px;margin-top:8px;}
-
-/* DEMO BANNER */
-.demo-banner{background:linear-gradient(135deg,rgba(124,111,255,.15),rgba(255,107,138,.1));border:1px solid rgba(124,111,255,.3);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.demo-banner-text h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:4px;}
-.demo-banner-text p{font-size:12px;color:var(--text2);}
-
-/* INSTALL PROMPT */
-.install-card{background:linear-gradient(135deg,rgba(124,111,255,.1),rgba(0,212,170,.08));border:1px solid rgba(124,111,255,.25);border-radius:var(--radius);padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
-.install-card-icon{font-size:32px;flex-shrink:0;}
-.install-card h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px;}
-.install-card p{font-size:11px;color:var(--text2);}
-
-/* DOTS */
-.dots{display:inline-flex;gap:3px;align-items:center;}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:dotpulse 1.2s infinite;}
-.dot:nth-child(2){animation-delay:.2s;}
-.dot:nth-child(3){animation-delay:.4s;}
-@keyframes dotpulse{0%,80%,100%{opacity:.3;transform:scale(.7);}40%{opacity:1;transform:scale(1);}}
-
-/* OVERLAY */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;backdrop-filter:blur(2px);}
-.overlay.open{display:block;}
-
-/* SCROLLBAR */
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-
-/* MOBILE */
-@media(max-width:768px){
-  .sidebar{position:fixed;left:0;top:0;height:100%;transform:translateX(-100%);transition:transform .25s ease;}
-  .sidebar.open{transform:translateX(0);}
-  .hamburger{display:flex;}
-  .page{padding:16px;}
-  .grid2,.grid3,.stats-grid{grid-template-columns:1fr;}
-  .template-grid{grid-template-columns:1fr;}
-  .chat-wrap{height:240px;}
-  .demo-banner{flex-direction:column;align-items:flex-start;}
-  .install-card{flex-direction:column;text-align:center;}
-}
-@media(max-width:480px){
-  .topbar{padding:10px 14px;}
-  .page{padding:12px;}
-}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.stat{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px 12px;text-align:center;box-shadow:var(--sh);}
+.sv{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-0.3px;}
+.sl{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:3px;}
+.cats{display:flex;gap:6px;overflow-x:auto;padding:0 0 4px;scrollbar-width:none;margin-bottom:24px;}
+.cats::-webkit-scrollbar{display:none;}
+.cat{flex-shrink:0;background:var(--s);border:1px solid var(--b);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;color:var(--t2);}
+.cat:hover{border-color:var(--b2);color:var(--t);}
+.cat.active{background:var(--t);border-color:var(--t);color:white;}
+.sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
+.st{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:-0.3px;}
+.sa{font-size:13px;color:var(--t2);cursor:pointer;font-weight:500;text-decoration:underline;text-underline-offset:3px;}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;}
+.dc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .2s;position:relative;box-shadow:var(--sh);}
+.dc:hover{box-shadow:var(--shm);transform:translateY(-2px);border-color:var(--b2);}
+.dc:active{transform:translateY(0);}
+.de{width:100%;height:80px;background:var(--s2);border-radius:var(--rsm);margin-bottom:12px;object-fit:contain;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.de img{width:100%;height:100%;object-fit:contain;}
+.de-emoji{font-size:36px;}
+.dn{font-size:13px;font-weight:500;margin-bottom:3px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.ds{font-size:11px;color:var(--t3);margin-bottom:8px;}
+.dp{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.dpn{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:-0.2px;}
+.dps{font-size:10px;font-weight:600;color:var(--green);background:rgba(45,106,79,0.08);padding:2px 6px;border-radius:99px;}
+.pl{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+.pc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:14px;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
+.pc:hover{box-shadow:var(--shm);border-color:var(--b2);}
+.pe{width:60px;height:60px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
+.pe img{width:100%;height:100%;object-fit:contain;}
+.pi{flex:1;min-width:0;}
+.pn{font-size:14px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pm{font-size:12px;color:var(--t2);margin-bottom:8px;}
+.pb{display:flex;align-items:center;justify-content:space-between;}
+.pp{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:-0.3px;}
+.pd{font-size:12px;font-weight:600;color:var(--green);}
+.hero{padding:28px 0 20px;text-align:center;}
+.he{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;}
+.hero h1{font-family:'DM Serif Display',serif;font-size:32px;line-height:1.15;margin-bottom:8px;letter-spacing:-0.5px;}
+.hero h1 em{font-style:italic;color:var(--t2);}
+.hero p{font-size:14px;color:var(--t2);margin-bottom:22px;line-height:1.6;}
+.hs{display:flex;gap:8px;max-width:480px;margin:0 auto;}
+.hs input{flex:1;background:var(--s);border:1px solid var(--b2);border-radius:14px;padding:14px 18px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;box-shadow:var(--sh);}
+.hs input:focus{border-color:var(--t);}
+.hs button{background:var(--t);border:none;border-radius:14px;padding:14px 22px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;cursor:pointer;white-space:nowrap;transition:opacity .15s;}
+.hs button:active{opacity:0.75;}
+.br{display:flex;align-items:center;gap:12px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--b);}
+.bb{background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;color:var(--t);font-family:'DM Sans',sans-serif;}
+.bt{font-size:15px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh);}
+.ch{padding:18px;border-bottom:1px solid var(--b);display:flex;gap:14px;align-items:center;}
+.cem{width:56px;height:56px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
+.cem img{width:100%;height:100%;object-fit:contain;}
+.ci h3{font-size:15px;font-weight:500;margin-bottom:4px;}
+.ci p{font-size:13px;color:var(--t2);}
+.sr{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);gap:12px;transition:background .15s;}
+.sr:last-child{border:none;}
+.sr:hover{background:var(--s2);}
+.snw{flex:1;}
+.sn{font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px;}
+.ss{font-size:12px;color:var(--t2);margin-top:1px;}
+.bp{font-size:9px;font-weight:600;background:var(--green);color:white;padding:2px 6px;border-radius:99px;text-transform:uppercase;}
+.srr{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.spr{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:-0.2px;}
+.spr.best{color:var(--green);}
+.bybtn{background:var(--t);border:none;border-radius:var(--rsm);padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;color:white;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
+.bybtn:active{opacity:0.75;}
+.bybtn.sec{background:var(--s2);color:var(--t);border:1px solid var(--b2);}
+.wi{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;box-shadow:var(--sh);}
+.we{width:44px;height:44px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.wii{flex:1;}
+.wn{font-size:14px;font-weight:500;margin-bottom:2px;}
+.wt{font-size:12px;color:var(--t2);}
+.wpr{font-family:'DM Serif Display',serif;font-size:17px;}
+.wpr.hit{color:var(--green);}
+.ph{background:var(--t);border-radius:20px;padding:28px 24px;margin-bottom:20px;color:white;text-align:center;}
+.ph h2{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px;letter-spacing:-0.4px;}
+.ph h2 em{font-style:italic;opacity:0.65;}
+.ph p{font-size:14px;opacity:0.6;margin-bottom:24px;line-height:1.6;}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+.plan{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;transition:all .15s;}
+.plan.pop{background:white;border-color:white;}
+.plb{font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:8px;display:inline-block;letter-spacing:0.06em;text-transform:uppercase;background:rgba(255,255,255,0.2);color:white;}
+.plan.pop .plb{background:var(--green);color:white;}
+.plna{font-size:11px;opacity:0.55;margin-bottom:4px;color:white;}
+.plan.pop .plna{color:var(--t2);opacity:1;}
+.plpr{font-family:'DM Serif Display',serif;font-size:26px;color:white;letter-spacing:-0.4px;}
+.plan.pop .plpr{color:var(--t);}
+.plpe{font-size:11px;opacity:0.45;color:white;margin-top:1px;}
+.plan.pop .plpe{color:var(--t2);opacity:1;}
+.plsa{font-size:10px;font-weight:600;color:rgba(255,255,255,0.5);margin-top:3px;}
+.plan.pop .plsa{color:var(--green);}
+.fl{text-align:left;margin-bottom:20px;}
+.fe{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:14px;opacity:0.75;}
+.fe:last-child{border:none;}
+.fck{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.ctabtn{background:white;border:none;border-radius:var(--r);padding:16px;width:100%;color:var(--t);font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;cursor:pointer;}
+.ctan{font-size:11px;opacity:0.35;margin-top:10px;}
+.ptop{text-align:center;padding:28px 0 20px;}
+.av{width:72px;height:72px;border-radius:50%;background:var(--s2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 14px;}
+.pna{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-0.3px;}
+.ppl{font-size:13px;color:var(--t2);margin-top:4px;}
+.mi{display:flex;align-items:center;gap:14px;padding:16px;background:var(--s);border:1px solid var(--b);border-radius:var(--r);margin-bottom:8px;cursor:pointer;box-shadow:var(--sh);transition:all .15s;}
+.mi:hover{border-color:var(--b2);}
+.mic{font-size:18px;width:22px;text-align:center;flex-shrink:0;}
+.mil{flex:1;font-size:14px;font-weight:500;}
+.mia{color:var(--t3);font-size:16px;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--t);border-radius:99px;padding:11px 22px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;color:white;box-shadow:var(--shm);}
+.toast.show{opacity:1;}
+.loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px;color:var(--t2);font-size:14px;}
+.spin{width:18px;height:18px;border:2px solid var(--b2);border-top-color:var(--t);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{text-align:center;padding:40px 20px;color:var(--t2);}
+.empty p{font-size:14px;margin-top:8px;}
+@media(max-width:360px){.dg{grid-template-columns:1fr;}.plans{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
-<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
 <div class="app">
-  <!-- SIDEBAR -->
-  <nav class="sidebar" id="sidebar">
-    <div class="logo">
-      <div class="logo-icon" style="font-size:20px">💬</div>
-      <div class="logo-text">Re<span>plai</span></div>
+  <div class="topbar">
+    <div class="logo">Price<em>Hunt</em></div>
+    <div class="sw">
+      <svg class="si" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 10.5L13.5 13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <input type="text" id="top-search" placeholder="Search any product..." onkeydown="if(event.key==='Enter')doSearch(this.value)">
     </div>
-    <div class="nav-section" data-i18n="nav.panel">Panel</div>
-    <button class="nav-item active" onclick="nav('dashboard',this)"><span class="icon">📊</span><span data-i18n="nav.dashboard">Dashboard</span></button>
-    <button class="nav-item" onclick="nav('konfiguracja',this)"><span class="icon">⚙️</span><span data-i18n="nav.config">Konfiguracja</span></button>
-    <button class="nav-item" onclick="nav('testuj',this)"><span class="icon">💬</span><span data-i18n="nav.test">Testuj asystenta</span></button>
-    <div class="nav-section" data-i18n="nav.data">Dane</div>
-    <button class="nav-item" onclick="nav('historia',this)"><span class="icon">📋</span><span data-i18n="nav.history">Historia</span><span class="nav-badge" id="history-badge" style="display:none">0</span></button>
-    <button class="nav-item" onclick="nav('statystyki',this)"><span class="icon">📈</span><span data-i18n="nav.stats">Statystyki</span></button>
-    <div class="nav-section" data-i18n="nav.tools">Narzędzia</div>
-    <button class="nav-item" onclick="nav('szablony',this)"><span class="icon">📝</span><span data-i18n="nav.templates">Szablony</span></button>
-    <button class="nav-item" onclick="nav('demo',this)"><span class="icon">🎯</span><span data-i18n="nav.demo">Demo dla klienta</span></button>
-    <button class="nav-item" onclick="nav('integracje',this)"><span class="icon">🔗</span><span data-i18n="nav.integrations">Integracje</span></button>
-  </nav>
+    <button class="sbtn" onclick="doSearch(document.getElementById('top-search').value)">Search</button>
+  </div>
 
-  <!-- MAIN -->
-  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <div class="topbar-left">
-        <button class="hamburger" onclick="toggleSidebar()">☰</button>
-        <h2 id="page-title">Dashboard</h2>
+  <div class="content" id="content">
+    <div id="page-home" class="page active">
+      <div class="stats">
+        <div class="stat"><div class="sv">12K+</div><div class="sl">Stores</div></div>
+        <div class="stat"><div class="sv">Live</div><div class="sl">Prices</div></div>
+        <div class="stat"><div class="sv">Free</div><div class="sl">To use</div></div>
       </div>
-      <div class="topbar-right">
-        <button class="lang-btn active" onclick="setLang('pl')" id="btn-pl">PL</button>
-        <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
-        <button class="install-btn" id="install-btn" onclick="installPWA()">📲 Zainstaluj</button>
+      <div class="cats" id="cats">
+        <div class="cat active" onclick="loadDeals('best deals today',this)">🔥 Hot</div>
+        <div class="cat" onclick="loadDeals('electronics deals',this)">Electronics</div>
+        <div class="cat" onclick="loadDeals('fashion sale',this)">Fashion</div>
+        <div class="cat" onclick="loadDeals('home appliances deal',this)">Home</div>
+        <div class="cat" onclick="loadDeals('sports equipment sale',this)">Sports</div>
+        <div class="cat" onclick="loadDeals('beauty products deal',this)">Beauty</div>
+        <div class="cat" onclick="loadDeals('gaming deals',this)">Gaming</div>
+        <div class="cat" onclick="loadDeals('books deals',this)">Books</div>
       </div>
+      <div class="sh"><div class="st">Hot deals</div><span class="sa" onclick="navTo('search')">See all</span></div>
+      <div class="dg" id="hot-deals"><div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div></div>
+      <div class="sh"><div class="st">Biggest drops</div></div>
+      <div class="pl" id="price-drops"></div>
     </div>
 
-    <div class="main" id="main-content">
-
-      <!-- DASHBOARD -->
-      <div id="page-dashboard" class="page active">
-        <div id="install-card-wrap" style="display:none">
-          <div class="install-card">
-            <div class="install-card-icon">📲</div>
-            <div>
-              <h4 data-i18n="install.title">Zainstaluj aplikację na telefonie</h4>
-              <p data-i18n="install.desc">Dodaj AI Asystenta do ekranu głównego — działa jak natywna aplikacja, bez App Store.</p>
-              <button class="btn btn-primary" style="margin-top:10px" onclick="installPWA()" data-i18n="install.btn">📲 Zainstaluj teraz</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat">
-            <div class="stat-label" data-i18n="stat.today">Rozmowy dziś</div>
-            <div class="stat-value" id="s-today">0</div>
-            <div class="stat-change up" id="s-today-change">↑ start</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label" data-i18n="stat.total">Łącznie</div>
-            <div class="stat-value" id="s-total">0</div>
-            <div class="stat-change up">↑ AI odpowiedzi</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label" data-i18n="stat.status">Status</div>
-            <div class="stat-value" style="font-size:16px;margin-top:10px">
-              <span class="status"><span class="status-dot green"></span><span data-i18n="stat.active">Aktywny</span></span>
-            </div>
-            <div class="stat-change up">24/7</div>
-          </div>
-        </div>
-
-        <div class="grid2">
-          <div class="card">
-            <div class="card-title">
-              <div class="card-title-left"><span data-i18n="dash.recent">Ostatnie rozmowy</span><span class="badge">Live</span></div>
-            </div>
-            <div id="recent-list"><p style="color:var(--text2);font-size:12px;text-align:center;padding:16px 0" data-i18n="dash.noconv">Brak rozmów — zacznij testować</p></div>
-          </div>
-          <div class="card">
-            <div class="card-title"><div class="card-title-left"><span data-i18n="dash.controls">Sterowanie</span></div></div>
-            <div class="toggle-row"><div class="toggle-info"><h4 data-i18n="ctrl.active">Asystent aktywny</h4><p data-i18n="ctrl.active.desc">Odpowiada na wiadomości</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="toggle-row"><div class="toggle-info"><h4 data-i18n="ctrl.night">Tryb nocny</h4><p data-i18n="ctrl.night.desc">Informuje że odpowie rano</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="toggle-row"><div class="toggle-info"><h4 data-i18n="ctrl.escalate">Eskalacja</h4><p data-i18n="ctrl.escalate.desc">Trudne pytania idą do ciebie</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-            <div class="toggle-row"><div class="toggle-info"><h4 data-i18n="ctrl.leads">Zbieranie leadów</h4><p data-i18n="ctrl.leads.desc">Pyta o imię i telefon</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
-          </div>
+    <div id="page-search" class="page">
+      <div class="hero">
+        <div class="he">Real prices · Live data</div>
+        <h1>Find the <em>best price</em><br>anywhere</h1>
+        <p>We search thousands of stores in real time</p>
+        <div class="hs">
+          <input type="text" id="hero-search" placeholder="Nike shoes, iPhone 16, PS5...">
+          <button onclick="doSearch(document.getElementById('hero-search').value)">Search</button>
         </div>
       </div>
-
-      <!-- KONFIGURACJA -->
-      <div id="page-konfiguracja" class="page">
-        <div class="notice"><span>💡</span><span data-i18n="config.notice">Im więcej informacji podasz, tym lepiej asystent odpowie klientom.</span></div>
-        <div class="card">
-          <div class="card-title"><div class="card-title-left" data-i18n="config.basic">Podstawowe informacje</div></div>
-          <div class="grid2">
-            <div class="form-group"><label data-i18n="field.name">Nazwa firmy *</label><input type="text" id="firm-name" placeholder="np. Warsztat Kowalski"></div>
-            <div class="form-group"><label data-i18n="field.type">Typ działalności</label><select id="firm-type"><option value="">Wybierz...</option><option value="sklep">Sklep / handel</option><option value="gabinet">Gabinet / salon</option><option value="restauracja">Restauracja / kawiarnia</option><option value="warsztat">Warsztat samochodowy</option><option value="usluga">Inne usługi</option></select></div>
-          </div>
-          <div class="grid2">
-            <div class="form-group"><label data-i18n="field.address">Adres</label><input type="text" id="firm-address" placeholder="ul. Główna 1, Nowa Dęba"></div>
-            <div class="form-group"><label data-i18n="field.phone">Telefon</label><input type="text" id="firm-phone" placeholder="+48 xxx xxx xxx"></div>
-          </div>
-          <div class="form-group"><label data-i18n="field.hours">Godziny otwarcia</label><input type="text" id="firm-hours" placeholder="Pon-Pt: 8:00-18:00, Sob: 9:00-14:00"></div>
-        </div>
-        <div class="card">
-          <div class="card-title"><div class="card-title-left" data-i18n="config.offer">Oferta</div></div>
-          <div class="form-group"><label data-i18n="field.services">Usługi / produkty *</label><textarea id="firm-services" placeholder="Opisz co robisz, jakie usługi świadczysz..."></textarea></div>
-          <div class="form-group"><label data-i18n="field.prices">Cennik</label><textarea id="firm-prices" placeholder="np. Wymiana oleju: 150 PLN..."></textarea></div>
-          <div class="form-group"><label data-i18n="field.booking">Jak umówić wizytę?</label><input type="text" id="firm-booking" placeholder="np. Telefonicznie lub przez Facebook"></div>
-        </div>
-        <div class="card">
-          <div class="card-title"><div class="card-title-left" data-i18n="config.style">Styl komunikacji</div></div>
-          <div class="form-group"><label data-i18n="field.tone">Ton rozmowy</label><select id="firm-tone"><option value="przyjazny">Przyjazny i ciepły</option><option value="profesjonalny">Profesjonalny</option><option value="nieformalny">Nieformalny</option></select></div>
-          <div class="form-group"><label data-i18n="field.extra">Dodatkowe informacje</label><textarea id="firm-extra" placeholder="Co jeszcze powinien wiedzieć asystent?"></textarea></div>
-        </div>
-        <button class="btn btn-primary btn-full" onclick="saveConfig()" id="save-btn">💾 <span data-i18n="btn.save">Zapisz konfigurację</span></button>
+      <div id="search-results-wrap" style="display:none">
+        <div id="search-results"></div>
       </div>
-
-      <!-- TESTUJ -->
-      <div id="page-testuj" class="page">
-        <div class="grid2">
-          <div>
-            <div class="card">
-              <div class="card-title"><div class="card-title-left" data-i18n="test.quick">Szybkie pytania</div><span class="badge">Kliknij</span></div>
-              <div id="quick-q" style="display:flex;flex-direction:column;gap:8px"></div>
-            </div>
-            <div class="card">
-              <div class="card-title"><div class="card-title-left" data-i18n="test.templates">Szablony odpowiedzi</div></div>
-              <div id="template-quick" style="display:flex;flex-direction:column;gap:6px"></div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-title"><div class="card-title-left" data-i18n="test.chat">Podgląd rozmowy</div></div>
-            <div class="chat-wrap" id="chat-win">
-              <div class="chat-msg"><div class="chat-av">🤖</div><div class="chat-bub">Cześć! Jestem asystentem <strong id="bot-name">twojej firmy</strong>. W czym mogę pomóc? 😊</div></div>
-            </div>
-            <div class="chat-input-row">
-              <input type="text" id="chat-in" placeholder="Napisz jako klient..." onkeydown="if(event.key==='Enter')sendMsg()">
-              <button class="btn btn-primary" onclick="sendMsg()">➤</button>
-            </div>
-          </div>
+      <div id="search-empty">
+        <div class="sh"><div class="st">Try searching for...</div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span onclick="doSearch('Nike Air Max')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">Nike Air Max</span>
+          <span onclick="doSearch('iPhone 16')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">iPhone 16</span>
+          <span onclick="doSearch('PS5')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">PS5</span>
+          <span onclick="doSearch('MacBook Air')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">MacBook Air</span>
+          <span onclick="doSearch('Dyson vacuum')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">Dyson vacuum</span>
+          <span onclick="doSearch('AirPods Pro')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">AirPods Pro</span>
         </div>
       </div>
+    </div>
 
-      <!-- HISTORIA -->
-      <div id="page-historia" class="page">
-        <div class="card">
-          <div class="card-title">
-            <div class="card-title-left" data-i18n="hist.title">Historia rozmów</div>
-            <button class="btn btn-secondary" onclick="loadHistory()" style="padding:5px 10px;font-size:11px">🔄</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th data-i18n="col.time">Czas</th><th data-i18n="col.channel">Kanał</th><th data-i18n="col.question">Pytanie</th><th data-i18n="col.status">Status</th></tr></thead>
-              <tbody id="hist-body"><tr><td colspan="4" style="text-align:center;color:var(--text2);padding:24px" data-i18n="hist.empty">Brak historii</td></tr></tbody>
-            </table>
-          </div>
-        </div>
+    <div id="page-product" class="page"><div id="product-detail"></div></div>
+
+    <div id="page-watch" class="page">
+      <div class="sh"><div class="st">Price alerts</div></div>
+      <div id="watchlist-items"></div>
+      <div style="margin-top:16px">
+        <button onclick="navTo('premium')" style="background:var(--t);border:none;border-radius:var(--r);padding:15px;width:100%;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;cursor:pointer;">Set price alert — Premium</button>
       </div>
+    </div>
 
-      <!-- STATYSTYKI -->
-      <div id="page-statystyki" class="page">
-        <div class="grid2">
-          <div class="card">
-            <div class="card-title"><div class="card-title-left" data-i18n="stats.week">Rozmowy w tygodniu</div></div>
-            <div class="chart-container"><canvas id="chart-week"></canvas></div>
+    <div id="page-premium" class="page">
+      <div class="ph">
+        <h2>Go <em>Premium</em></h2>
+        <p>Unlimited searches, instant alerts, and exclusive deals across every store worldwide</p>
+        <div class="plans">
+          <div class="plan" onclick="selectPlan('monthly',this)">
+            <div class="plna">Monthly</div>
+            <div class="plpr">$4.99</div>
+            <div class="plpe">per month</div>
           </div>
-          <div class="card">
-            <div class="card-title"><div class="card-title-left" data-i18n="stats.channels">Kanały</div></div>
-            <div class="chart-container"><canvas id="chart-channels"></canvas></div>
+          <div class="plan pop" onclick="selectPlan('yearly',this)">
+            <div class="plb">Best value</div>
+            <div class="plna">Yearly</div>
+            <div class="plpr">$2.99</div>
+            <div class="plpe">per month</div>
+            <div class="plsa">Save 40%</div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-title"><div class="card-title-left" data-i18n="stats.popular">Najpopularniejsze pytania</div></div>
-          <div id="popular-questions"><p style="color:var(--text2);font-size:12px" data-i18n="stats.nodata">Brak danych — zacznij testować asystenta</p></div>
+        <div class="fl">
+          <div class="fe"><div class="fck">✓</div>Unlimited product searches</div>
+          <div class="fe"><div class="fck">✓</div>Instant price drop alerts</div>
+          <div class="fe"><div class="fck">✓</div>Full price history charts</div>
+          <div class="fe"><div class="fck">✓</div>All 12,000+ global stores</div>
+          <div class="fe"><div class="fck">✓</div>AI price predictions</div>
+          <div class="fe"><div class="fck">✓</div>Multi-device sync</div>
         </div>
+        <button class="ctabtn" onclick="subscribe()" id="sub-btn">Start free 7-day trial</button>
+        <div class="ctan">Cancel anytime · No credit card required</div>
       </div>
+    </div>
 
-      <!-- SZABLONY -->
-      <div id="page-szablony" class="page">
-        <div class="notice"><span>📝</span><span data-i18n="tmpl.notice">Szablony to gotowe odpowiedzi które asystent może używać. Kliknij żeby użyć w teście.</span></div>
-        <div class="card">
-          <div class="card-title">
-            <div class="card-title-left" data-i18n="tmpl.title">Szablony odpowiedzi</div>
-            <button class="btn btn-primary" onclick="addTemplate()" style="padding:6px 12px;font-size:12px">+ <span data-i18n="tmpl.add">Dodaj</span></button>
-          </div>
-          <div id="templates-list" class="template-grid"></div>
-        </div>
-        <div class="card" id="tmpl-form-card" style="display:none">
-          <div class="card-title"><div class="card-title-left" data-i18n="tmpl.new">Nowy szablon</div></div>
-          <div class="form-group"><label data-i18n="tmpl.trigger">Słowo kluczowe (co mówi klient)</label><input type="text" id="tmpl-trigger" placeholder="np. cena, godziny, umówić"></div>
-          <div class="form-group"><label data-i18n="tmpl.response">Odpowiedź asystenta</label><textarea id="tmpl-response" placeholder="np. Nasze godziny otwarcia to..."></textarea></div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-primary" onclick="saveTemplate()"><span data-i18n="btn.save">Zapisz</span></button>
-            <button class="btn btn-secondary" onclick="document.getElementById('tmpl-form-card').style.display='none'"><span data-i18n="btn.cancel">Anuluj</span></button>
-          </div>
-        </div>
+    <div id="page-profile" class="page">
+      <div class="ptop">
+        <div class="av">👤</div>
+        <div class="pna">Guest</div>
+        <div class="ppl" id="profile-plan">Free plan</div>
       </div>
+      <div class="mi" onclick="navTo('premium')"><span class="mic">⭐</span><span class="mil">Upgrade to Premium</span><span class="mia">›</span></div>
+      <div class="mi" onclick="navTo('watch')"><span class="mic">🔔</span><span class="mil">Price Alerts</span><span class="mia">›</span></div>
+      <div class="mi"><span class="mic">🌍</span><span class="mil">Currency and Region</span><span class="mia">›</span></div>
+      <div class="mi"><span class="mic">❓</span><span class="mil">Help and Support</span><span class="mia">›</span></div>
+    </div>
+  </div>
 
-      <!-- DEMO -->
-      <div id="page-demo" class="page">
-        <div class="demo-banner">
-          <div class="demo-banner-text">
-            <h3 data-i18n="demo.title">🎯 Tryb Demo dla klienta</h3>
-            <p data-i18n="demo.desc">Pokaż klientowi jak działa asystent — bez logowania, bez konfiguracji. Wyślij mu ten link.</p>
-          </div>
-          <button class="btn btn-primary" onclick="openDemo()" data-i18n="demo.open">Otwórz demo →</button>
-        </div>
-        <div class="card">
-          <div class="card-title"><div class="card-title-left" data-i18n="demo.link">Link do demo</div></div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;font-family:monospace;font-size:12px;color:var(--accent);word-break:break-all;margin-bottom:12px" id="demo-url">Ładowanie...</div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-secondary" onclick="copyDemo()">📋 <span data-i18n="btn.copy">Kopiuj link</span></button>
-            <button class="btn btn-secondary" onclick="shareDemo()">📤 <span data-i18n="btn.share">Udostępnij</span></button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title"><div class="card-title-left" data-i18n="demo.preview">Podgląd strony demo</div></div>
-          <p style="font-size:12px;color:var(--text2);margin-bottom:12px" data-i18n="demo.preview.desc">Klient widzi prosty chat bez panelu administracyjnego.</p>
-          <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:16px;">
-            <div class="chat-wrap" id="demo-chat" style="height:200px;background:var(--surface3)">
-              <div class="chat-msg"><div class="chat-av">🤖</div><div class="chat-bub" id="demo-welcome">Cześć! Jak mogę pomóc?</div></div>
-            </div>
-            <div class="chat-input-row" style="margin-top:10px">
-              <input type="text" id="demo-in" placeholder="Napisz wiadomość..." onkeydown="if(event.key==='Enter')sendDemoMsg()">
-              <button class="btn btn-primary" onclick="sendDemoMsg()">➤</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- INTEGRACJE -->
-      <div id="page-integracje" class="page">
-        <div class="notice notice-warn"><span>⚠️</span><span data-i18n="int.notice">Integracje z Facebook/WhatsApp wymagają konta deweloperskiego Meta. Webhook jest gotowy pod adresem /webhook/facebook.</span></div>
-        <div class="grid2">
-          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:26px">💬</div><div><div style="font-weight:600;font-size:13px">Facebook Messenger</div><div style="font-size:11px;color:var(--text2)">/webhook/facebook</div></div></div><div class="form-group"><label>Page Token</label><input type="password" id="fb-token" placeholder="EAAx..."></div><button class="btn btn-primary btn-full" onclick="alert('Zapisano!')">Zapisz</button></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:26px">📱</div><div><div style="font-weight:600;font-size:13px">WhatsApp Business</div><div style="font-size:11px;color:var(--text2)">Przez Meta Business API</div></div></div><div class="form-group"><label>Phone Number ID</label><input type="text" id="wa-id" placeholder="123456789"></div><button class="btn btn-primary btn-full" onclick="alert('Zapisano!')">Zapisz</button></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:26px">🌐</div><div><div style="font-weight:600;font-size:13px">Widget na stronie</div><div style="font-size:11px;color:var(--text2)">Jeden tag script</div></div></div><div style="background:var(--surface2);border-radius:var(--radius-sm);padding:10px;font-family:monospace;font-size:11px;color:var(--accent);word-break:break-all;margin-bottom:10px" id="widget-code">Ładowanie kodu...</div><button class="btn btn-secondary btn-full" onclick="copyWidget()">📋 Kopiuj kod</button></div>
-          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:26px">📧</div><div><div style="font-weight:600;font-size:13px">Powiadomienia Push</div><div style="font-size:11px;color:var(--text2)">Gdy klient napisze</div></div></div><p style="font-size:12px;color:var(--text2);margin-bottom:10px">Otrzymuj powiadomienia na telefonie gdy klient pisze do asystenta.</p><button class="btn btn-primary btn-full" onclick="enablePush()" id="push-btn">🔔 Włącz powiadomienia</button></div>
-        </div>
-      </div>
-
-    </div><!-- end main -->
+  <div class="bottomnav">
+    <button class="nb active" onclick="navTo('home',this)" id="nav-home"><span class="ni">🏠</span>Home</button>
+    <button class="nb" onclick="navTo('search',this)" id="nav-search"><span class="ni">🔍</span>Search</button>
+    <button class="nb" onclick="navTo('watch',this)" id="nav-watch"><span class="ni">🔔</span>Alerts</button>
+    <button class="nb" onclick="navTo('premium',this)" id="nav-premium"><span class="ni">⭐</span>Premium</button>
+    <button class="nb" onclick="navTo('profile',this)" id="nav-profile"><span class="ni">👤</span>Profile</button>
   </div>
 </div>
+<div class="toast" id="toast"></div>
 
 <script>
-// === I18N ===
-const T = {
-  pl: {
-    'nav.panel':'Panel','nav.dashboard':'Dashboard','nav.config':'Konfiguracja',
-    'nav.test':'Testuj asystenta','nav.data':'Dane','nav.history':'Historia',
-    'nav.stats':'Statystyki','nav.tools':'Narzędzia','nav.templates':'Szablony',
-    'nav.demo':'Demo dla klienta','nav.integrations':'Integracje',
-    'stat.today':'Rozmowy dziś','stat.total':'Łącznie','stat.status':'Status','stat.active':'Aktywny',
-    'dash.recent':'Ostatnie rozmowy','dash.noconv':'Brak rozmów — zacznij testować',
-    'dash.controls':'Sterowanie',
-    'ctrl.active':'Asystent aktywny','ctrl.active.desc':'Odpowiada na wiadomości',
-    'ctrl.night':'Tryb nocny','ctrl.night.desc':'Informuje że odpowie rano',
-    'ctrl.escalate':'Eskalacja','ctrl.escalate.desc':'Trudne pytania idą do ciebie',
-    'ctrl.leads':'Zbieranie leadów','ctrl.leads.desc':'Pyta o imię i telefon',
-    'config.notice':'Im więcej informacji podasz, tym lepiej asystent odpowie klientom.',
-    'config.basic':'Podstawowe informacje','config.offer':'Oferta','config.style':'Styl komunikacji',
-    'field.name':'Nazwa firmy *','field.type':'Typ działalności','field.address':'Adres',
-    'field.phone':'Telefon','field.hours':'Godziny otwarcia','field.services':'Usługi / produkty *',
-    'field.prices':'Cennik','field.booking':'Jak umówić wizytę?','field.tone':'Ton rozmowy',
-    'field.extra':'Dodatkowe informacje',
-    'btn.save':'Zapisz konfigurację','btn.cancel':'Anuluj','btn.copy':'Kopiuj link','btn.share':'Udostępnij',
-    'test.quick':'Szybkie pytania','test.templates':'Szablony','test.chat':'Podgląd rozmowy',
-    'hist.title':'Historia rozmów','hist.empty':'Brak historii',
-    'col.time':'Czas','col.channel':'Kanał','col.question':'Pytanie','col.status':'Status',
-    'stats.week':'Rozmowy w tygodniu','stats.channels':'Kanały','stats.popular':'Popularne pytania',
-    'stats.nodata':'Brak danych — zacznij testować',
-    'tmpl.notice':'Szablony to gotowe odpowiedzi które asystent może używać.',
-    'tmpl.title':'Szablony odpowiedzi','tmpl.add':'Dodaj','tmpl.new':'Nowy szablon',
-    'tmpl.trigger':'Słowo kluczowe','tmpl.response':'Odpowiedź asystenta',
-    'demo.title':'🎯 Tryb Demo dla klienta',
-    'demo.desc':'Pokaż klientowi jak działa asystent — bez logowania.',
-    'demo.open':'Otwórz demo →','demo.link':'Link do demo',
-    'demo.preview':'Podgląd','demo.preview.desc':'Klient widzi prosty chat.',
-    'int.notice':'Integracje z Facebook/WhatsApp wymagają konta deweloperskiego Meta.',
-    'install.title':'Zainstaluj aplikację na telefonie',
-    'install.desc':'Dodaj AI Asystenta do ekranu głównego.',
-    'install.btn':'📲 Zainstaluj teraz',
-    'pages.dashboard':'Dashboard','pages.konfiguracja':'Konfiguracja',
-    'pages.testuj':'Testuj asystenta','pages.historia':'Historia',
-    'pages.statystyki':'Statystyki','pages.szablony':'Szablony',
-    'pages.demo':'Demo','pages.integracje':'Integracje',
-  },
-  en: {
-    'nav.panel':'Menu','nav.dashboard':'Dashboard','nav.config':'Configuration',
-    'nav.test':'Test assistant','nav.data':'Data','nav.history':'History',
-    'nav.stats':'Statistics','nav.tools':'Tools','nav.templates':'Templates',
-    'nav.demo':'Client demo','nav.integrations':'Integrations',
-    'stat.today':'Chats today','stat.total':'Total','stat.status':'Status','stat.active':'Active',
-    'dash.recent':'Recent chats','dash.noconv':'No chats — start testing',
-    'dash.controls':'Controls',
-    'ctrl.active':'Assistant active','ctrl.active.desc':'Responds to messages',
-    'ctrl.night':'Night mode','ctrl.night.desc':'Informs will reply in morning',
-    'ctrl.escalate':'Escalation','ctrl.escalate.desc':'Hard questions go to you',
-    'ctrl.leads':'Lead collection','ctrl.leads.desc':'Asks for name and phone',
-    'config.notice':'The more info you provide, the better the assistant responds.',
-    'config.basic':'Basic information','config.offer':'Services','config.style':'Communication style',
-    'field.name':'Company name *','field.type':'Business type','field.address':'Address',
-    'field.phone':'Phone','field.hours':'Opening hours','field.services':'Services / products *',
-    'field.prices':'Price list','field.booking':'How to book?','field.tone':'Tone',
-    'field.extra':'Additional info',
-    'btn.save':'Save configuration','btn.cancel':'Cancel','btn.copy':'Copy link','btn.share':'Share',
-    'test.quick':'Quick questions','test.templates':'Templates','test.chat':'Chat preview',
-    'hist.title':'Chat history','hist.empty':'No history',
-    'col.time':'Time','col.channel':'Channel','col.question':'Question','col.status':'Status',
-    'stats.week':'Chats this week','stats.channels':'Channels','stats.popular':'Popular questions',
-    'stats.nodata':'No data — start testing',
-    'tmpl.notice':'Templates are ready-made answers the assistant can use.',
-    'tmpl.title':'Response templates','tmpl.add':'Add','tmpl.new':'New template',
-    'tmpl.trigger':'Trigger keyword','tmpl.response':'Assistant response',
-    'demo.title':'🎯 Client Demo Mode',
-    'demo.desc':'Show client how the assistant works — no login required.',
-    'demo.open':'Open demo →','demo.link':'Demo link',
-    'demo.preview':'Preview','demo.preview.desc':'Client sees simple chat.',
-    'int.notice':'Facebook/WhatsApp integrations require a Meta developer account.',
-    'install.title':'Install app on phone',
-    'install.desc':'Add AI Assistant to home screen — works like native app.',
-    'install.btn':'📲 Install now',
-    'pages.dashboard':'Dashboard','pages.konfiguracja':'Configuration',
-    'pages.testuj':'Test assistant','pages.historia':'History',
-    'pages.statystyki':'Statistics','pages.szablony':'Templates',
-    'pages.demo':'Demo','pages.integracje':'Integrations',
+const TAG = 'pricehunt20-20';
+let currentPage = 'home';
+let prevPage = 'home';
+let currentProductLink = null;
+
+const PAGES = ['home','search','product','watch','premium','profile'];
+function navTo(page, el){
+  prevPage = currentPage;
+  currentPage = page;
+  PAGES.forEach(p=>{ const e=document.getElementById('page-'+p); if(e) e.classList.remove('active'); });
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  const pg=document.getElementById('page-'+page); if(pg) pg.classList.add('active');
+  const nb=document.getElementById('nav-'+page); if(nb) nb.classList.add('active'); else if(el) el.classList.add('active');
+  document.getElementById('content').scrollTop=0;
+  if(page==='watch') renderWatchlist();
+  if(page==='profile') renderProfile();
+}
+function goBack(){ navTo(prevPage); }
+
+function imgOrEmoji(url, fallback){
+  if(url) return `<img src="${url}" onerror="this.style.display='none';this.parentNode.innerHTML='<span class=de-emoji>${fallback}</span>'">`;
+  return `<span class="de-emoji">${fallback}</span>`;
+}
+
+// === LOAD DEALS (real data from SerpApi) ===
+async function loadDeals(query, el){
+  if(el){
+    document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
   }
-};
-let lang = localStorage.getItem('lang') || 'pl';
+  const hotDeals = document.getElementById('hot-deals');
+  const priceDrops = document.getElementById('price-drops');
+  hotDeals.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading live deals...</div>`;
+  priceDrops.innerHTML = '';
 
-function t(key) { return T[lang][key] || T.pl[key] || key; }
-
-function setLang(l) {
-  lang = l;
-  localStorage.setItem('lang', l);
-  document.getElementById('btn-pl').classList.toggle('active', l==='pl');
-  document.getElementById('btn-en').classList.toggle('active', l==='en');
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.dataset.i18n);
-  });
-  updateTestPage();
-}
-
-// === PWA ===
-let deferredPrompt = null;
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(()=>{});
-}
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('install-btn').style.display = 'block';
-  document.getElementById('install-card-wrap').style.display = 'block';
-});
-function installPWA() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
-      document.getElementById('install-btn').style.display = 'none';
-      document.getElementById('install-card-wrap').style.display = 'none';
-    });
-  } else {
-    alert(lang==='pl'
-      ? 'Na iOS: Safari → Udostępnij → Dodaj do ekranu głównego'
-      : 'On iOS: Safari → Share → Add to Home Screen');
-  }
-}
-
-// === PUSH ===
-async function enablePush() {
-  if (!('Notification' in window)) { alert('Powiadomienia nie są obsługiwane'); return; }
-  const perm = await Notification.requestPermission();
-  if (perm === 'granted') {
-    document.getElementById('push-btn').textContent = '✅ Powiadomienia włączone';
-    document.getElementById('push-btn').className = 'btn btn-success btn-full';
-    new Notification('AI Asystent', { body: 'Powiadomienia włączone! Otrzymasz alert gdy klient napisze.' });
-  }
-}
-
-// === NAV ===
-const pageTitles = {
-  dashboard:'pages.dashboard',konfiguracja:'pages.konfiguracja',
-  testuj:'pages.testuj',historia:'pages.historia',
-  statystyki:'pages.statystyki',szablony:'pages.szablony',
-  demo:'pages.demo',integracje:'pages.integracje'
-};
-
-function nav(page, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  el.classList.add('active');
-  document.getElementById('page-title').textContent = t(pageTitles[page] || page);
-  closeSidebar();
-  if (page === 'historia') loadHistory();
-  if (page === 'testuj') updateTestPage();
-  if (page === 'statystyki') renderCharts();
-  if (page === 'szablony') renderTemplates();
-  if (page === 'demo') updateDemo();
-}
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('open');
-}
-
-// === CONFIG ===
-const API = '';
-let chatHist = [];
-let templates = JSON.parse(localStorage.getItem('templates') || '[]');
-
-async function saveConfig() {
-  const config = {
-    id:'default',
-    name:document.getElementById('firm-name').value,
-    type:document.getElementById('firm-type').value,
-    address:document.getElementById('firm-address').value,
-    phone:document.getElementById('firm-phone').value,
-    hours:document.getElementById('firm-hours').value,
-    services:document.getElementById('firm-services').value,
-    prices:document.getElementById('firm-prices').value,
-    booking:document.getElementById('firm-booking').value,
-    tone:document.getElementById('firm-tone').value,
-    extra:document.getElementById('firm-extra').value,
-  };
-  if (!config.name||!config.services){alert(lang==='pl'?'Uzupełnij nazwę firmy i opis usług':'Fill company name and services');return;}
-  const btn = document.getElementById('save-btn');
-  btn.textContent = lang==='pl'?'Zapisywanie...':'Saving...';
   try {
-    await fetch(API+'/api/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});
-    btn.innerHTML = '✅ '+(lang==='pl'?'Zapisano!':'Saved!');
-    btn.className = 'btn btn-success btn-full';
-    setTimeout(()=>{btn.innerHTML='💾 <span>'+t('btn.save')+'</span>';btn.className='btn btn-primary btn-full';},2000);
-    chatHist=[];
-  } catch(e){
-    btn.textContent='❌ Błąd';
-    setTimeout(()=>{btn.innerHTML='💾 <span>'+t('btn.save')+'</span>';btn.className='btn btn-primary btn-full';},3000);
+    const res = await fetch(`/api/deals?cat=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    const items = data.results || [];
+
+    if(items.length === 0){
+      hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>No deals found. Try another category.</p></div>`;
+      return;
+    }
+
+    hotDeals.innerHTML = items.slice(0,6).map(d=>`
+      <div class="dc" onclick="showProductByItem(${d.id})">
+        <div class="de">${imgOrEmoji(d.image,'🛍️')}</div>
+        <div class="dn">${d.name}</div>
+        <div class="ds">${d.store}</div>
+        <div class="dp">
+          <div class="dpn">$${d.price.toFixed(2)}</div>
+          ${d.tag ? `<div class="dps">${d.tag}</div>` : ''}
+        </div>
+      </div>`).join('');
+
+    priceDrops.innerHTML = items.slice(6,12).map(d=>`
+      <div class="pc" onclick="showProductByItem(${d.id})">
+        <div class="pe">${imgOrEmoji(d.image,'🛍️')}</div>
+        <div class="pi">
+          <div class="pn">${d.name}</div>
+          <div class="pm">${d.store}</div>
+          <div class="pb"><div class="pp">$${d.price.toFixed(2)}</div><div class="pd">${d.rating ? '⭐ '+d.rating : ''}</div></div>
+        </div>
+      </div>`).join('');
+
+    window._dealsCache = items;
+  } catch(err){
+    hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>Could not load deals. Check connection.</p></div>`;
   }
 }
 
-async function updateTestPage() {
+// === SEARCH ===
+async function doSearch(q){
+  if(!q.trim()){ showToast('Enter a product name'); return; }
+  navTo('search');
+  document.getElementById('hero-search').value = q;
+  document.getElementById('top-search').value = q;
+  document.getElementById('search-results-wrap').style.display = 'block';
+  document.getElementById('search-empty').style.display = 'none';
+
+  const r = document.getElementById('search-results');
+  r.innerHTML = `<div class="loading"><div class="spin"></div>Searching live prices...</div>`;
+
   try {
-    const r = await fetch(API+'/api/config/default');
-    const cfg = await r.json();
-    const name = cfg.name||'twojej firmy';
-    document.getElementById('bot-name').textContent = name;
-    document.getElementById('chat-win').innerHTML = `<div class="chat-msg"><div class="chat-av">🤖</div><div class="chat-bub">Cześć! Jestem asystentem <strong>${name}</strong>. W czym mogę pomóc? 😊</div></div>`;
-    chatHist=[];
-    const qs = {
-      sklep:['Jakie macie godziny otwarcia?','Czy macie możliwość dostawy?','Jak złożyć zamówienie?'],
-      gabinet:['Czy są wolne terminy?','Ile kosztuje wizyta?','Jak umówić wizytę?'],
-      restauracja:['Czy można zarezerwować stolik?','Jakie jest menu dnia?','Do której jesteście otwarci?'],
-      warsztat:['Ile kosztuje wymiana opon?','Czy przyjmiecie w sobotę?','Jak długo trwa przegląd?'],
-      usluga:['Jakie usługi oferujecie?','Jak mogę się umówić?','Czy można zapłacić kartą?'],
-    };
-    const q = qs[cfg.type]||['Jakie macie godziny?','Co oferujecie?','Jak się skontaktować?'];
-    document.getElementById('quick-q').innerHTML = q.map(x=>`<button class="btn btn-secondary" style="text-align:left;width:100%;font-size:12px" onclick="quickAsk('${x}')">${x}</button>`).join('');
-    document.getElementById('template-quick').innerHTML = templates.slice(0,3).map(t=>`<button class="btn btn-secondary" style="text-align:left;width:100%;font-size:11px" onclick="quickAsk('${t.trigger}')">💬 ${t.trigger}</button>`).join('') || `<p style="color:var(--text2);font-size:11px">Brak szablonów</p>`;
-  } catch(e){}
+    const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    const items = data.results || [];
+
+    if(items.length === 0){
+      r.innerHTML = `<div class="empty"><p>No results for "${q}". Try different keywords.</p></div>`;
+      return;
+    }
+
+    r.innerHTML = items.map(d=>`
+      <div class="pc" onclick="showProductByItem(${d.id}, '${encodeURIComponent(d.name)}')">
+        <div class="pe">${imgOrEmoji(d.image,'🛍️')}</div>
+        <div class="pi">
+          <div class="pn">${d.name}</div>
+          <div class="pm">${d.store} ${d.rating ? '· ⭐ '+d.rating : ''}</div>
+          <div class="pb">
+            <div class="pp">$${d.price.toFixed(2)}</div>
+            <div class="pd">${d.drop ? '-'+d.drop+'% off' : 'Live price'}</div>
+          </div>
+        </div>
+      </div>`).join('');
+
+    window._searchCache = items;
+  } catch(err){
+    r.innerHTML = `<div class="empty"><p>Search failed. Please try again.</p></div>`;
+  }
 }
 
-function quickAsk(q){document.getElementById('chat-in').value=q;sendMsg();}
+// === PRODUCT DETAIL ===
+async function showProductByItem(id, nameEncoded){
+  const cache = window._searchCache || window._dealsCache || [];
+  const d = cache.find(x=>x.id===id);
+  if(!d) return;
+  showProductDetail(d);
+}
 
-async function sendMsg() {
-  const input=document.getElementById('chat-in');
-  const msg=input.value.trim();
-  if(!msg)return;
-  input.value='';
-  addMsg(msg,'user','chat-win');
-  const tid='t'+Date.now();
-  document.getElementById('chat-win').innerHTML+=`<div class="chat-msg" id="${tid}"><div class="chat-av">🤖</div><div class="chat-bub"><div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div></div>`;
-  scrollChat('chat-win');
+async function showProductDetail(d){
+  navTo('product');
+  const detail = document.getElementById('product-detail');
+  detail.innerHTML = `
+    <div class="br">
+      <button class="bb" onclick="goBack()">← Back</button>
+      <div class="bt">${d.name}</div>
+    </div>
+    <div class="loading"><div class="spin"></div>Comparing prices across stores...</div>`;
+
   try {
-    chatHist.push({role:'user',content:msg});
-    const r=await fetch(API+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,configId:'default',history:chatHist})});
-    const d=await r.json();
-    if(d.error)throw new Error(d.error);
-    chatHist.push({role:'assistant',content:d.reply});
-    document.getElementById(tid)?.remove();
-    addMsg(d.reply,'bot','chat-win');
-    updateStats(msg);
-    sendNotification(msg);
-  } catch(e){
-    document.getElementById(tid)?.remove();
-    addMsg('Błąd: '+e.message,'bot','chat-win');
-  }
-}
+    const res = await fetch(`/api/compare?q=${encodeURIComponent(d.name)}`);
+    const data = await res.json();
+    const stores = data.stores || [];
 
-async function sendDemoMsg() {
-  const input=document.getElementById('demo-in');
-  const msg=input.value.trim();
-  if(!msg)return;
-  input.value='';
-  addMsg(msg,'user','demo-chat');
-  const tid='td'+Date.now();
-  document.getElementById('demo-chat').innerHTML+=`<div class="chat-msg" id="${tid}"><div class="chat-av">🤖</div><div class="chat-bub"><div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div></div>`;
-  scrollChat('demo-chat');
-  try {
-    const r=await fetch(API+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,configId:'default',history:[]})});
-    const d=await r.json();
-    document.getElementById(tid)?.remove();
-    addMsg(d.reply||'Dziękuję za wiadomość!','bot','demo-chat');
-  } catch(e){
-    document.getElementById(tid)?.remove();
-    addMsg('Asystent jest niedostępny','bot','demo-chat');
-  }
-}
+    if(stores.length === 0){
+      detail.innerHTML = `
+        <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
+        <div class="empty"><p>No price comparison available.</p></div>`;
+      return;
+    }
 
-function addMsg(text,who,container){
-  const el=document.getElementById(container);
-  const isUser=who==='user';
-  el.innerHTML+=`<div class="chat-msg ${isUser?'user':''}"><div class="chat-av">${isUser?'👤':'🤖'}</div><div class="chat-bub">${text.replace(/\n/g,'<br>')}</div></div>`;
-  scrollChat(container);
-}
-function scrollChat(id){const el=document.getElementById(id);el.scrollTop=el.scrollHeight;}
+    currentProductLink = stores[0].link;
 
-// === HISTORY ===
-let convCount=0;
-function updateStats(question){
-  convCount++;
-  document.getElementById('s-today').textContent=convCount;
-  document.getElementById('s-total').textContent=convCount;
-  const badge=document.getElementById('history-badge');
-  badge.style.display='block';
-  badge.textContent=convCount;
-  const rc=document.getElementById('recent-list');
-  if(rc.querySelector('p'))rc.innerHTML='';
-  const now=new Date().toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
-  rc.innerHTML=`<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><span style="color:var(--text2)">${now}</span> · ${question.substring(0,50)}${question.length>50?'...':''}</div>`+rc.innerHTML;
-}
-
-function sendNotification(question){
-  if(Notification.permission==='granted'){
-    new Notification('AI Asystent 🤖',{body:'Nowe pytanie: '+question.substring(0,60),icon:'/icon-192.svg'});
-  }
-}
-
-async function loadHistory(){
-  try{
-    const r=await fetch(API+'/api/history/default');
-    const hist=await r.json();
-    const tbody=document.getElementById('hist-body');
-    if(!hist.length){tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--text2);padding:20px">${t('hist.empty')}</td></tr>`;return;}
-    tbody.innerHTML=hist.map(h=>{
-      const time=new Date(h.timestamp).toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'});
-      const ch=h.channel==='facebook'?'<span class="tag tag-purple">💬 FB</span>':'<span class="tag tag-green">🖥 Panel</span>';
-      return `<tr><td style="color:var(--text2)">${time}</td><td>${ch}</td><td>${h.question.substring(0,50)}${h.question.length>50?'...':''}</td><td><span class="tag tag-green">✓</span></td></tr>`;
-    }).join('');
-  }catch(e){}
-}
-
-// === CHARTS ===
-let chartsInit=false;
-function renderCharts(){
-  if(chartsInit)return;
-  chartsInit=true;
-  const days=lang==='pl'?['Pon','Wt','Śr','Czw','Pt','Sob','Ndz']:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const data=[3,7,5,12,8,4,convCount];
-  new Chart(document.getElementById('chart-week'),{
-    type:'bar',
-    data:{labels:days,datasets:[{label:t('stats.week'),data,backgroundColor:'rgba(124,111,255,.6)',borderColor:'rgba(124,111,255,1)',borderWidth:1,borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#8888aa'}},x:{grid:{display:false},ticks:{color:'#8888aa'}}}}
-  });
-  new Chart(document.getElementById('chart-channels'),{
-    type:'doughnut',
-    data:{labels:['Panel','Facebook','WhatsApp'],datasets:[{data:[convCount||1,0,0],backgroundColor:['rgba(124,111,255,.8)','rgba(255,107,138,.8)','rgba(0,212,170,.8)'],borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#8888aa',font:{size:11}}}}}
-  });
-}
-
-// === TEMPLATES ===
-const defaultTemplates = [
-  {trigger:'godziny',response:'Jesteśmy otwarci Pon-Pt 8:00-18:00, Sob 9:00-14:00. W niedzielę nieczynne.'},
-  {trigger:'cena',response:'Ceny zależą od usługi. Proszę zadzwonić lub napisać — chętnie wycenimy!'},
-  {trigger:'umówić',response:'Zapraszamy do kontaktu telefonicznego lub przez Facebook — szybko umówimy wizytę 😊'},
-  {trigger:'adres',response:'Znajdziesz nas pod adresem: [uzupełnij adres]. Zapraszamy!'},
-];
-if(!templates.length){templates=defaultTemplates;localStorage.setItem('templates',JSON.stringify(templates));}
-
-function renderTemplates(){
-  const list=document.getElementById('templates-list');
-  if(!templates.length){list.innerHTML='<p style="color:var(--text2);font-size:12px">Brak szablonów</p>';return;}
-  list.innerHTML=templates.map((t,i)=>`
-    <div class="template-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <h4>💬 ${t.trigger}</h4>
-        <button onclick="deleteTemplate(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px">×</button>
+    detail.innerHTML = `
+      <div class="br">
+        <button class="bb" onclick="goBack()">← Back</button>
+        <div class="bt">${d.name}</div>
       </div>
-      <p>${t.response.substring(0,80)}${t.response.length>80?'...':''}</p>
+      <div class="cc">
+        <div class="ch">
+          <div class="cem">${imgOrEmoji(d.image,'🛍️')}</div>
+          <div class="ci">
+            <h3>${d.name}</h3>
+            <p>Best price: <strong style="color:var(--green)">$${stores[0].price.toFixed(2)}</strong> at ${stores[0].name}</p>
+          </div>
+        </div>
+        ${stores.map(s=>`
+          <div class="sr">
+            <div class="snw">
+              <div class="sn">${s.name} ${s.best?'<span class="bp">best</span>':''}</div>
+              <div class="ss">${s.shipping || 'Check store'} ${s.rating ? '· ⭐ '+s.rating : ''}</div>
+            </div>
+            <div class="srr">
+              <div class="spr ${s.best?'best':''}">$${s.price.toFixed(2)}</div>
+              <button class="${s.best?'bybtn':'bybtn sec'}" onclick="window.open('${s.link}','_blank')">Buy →</button>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;box-shadow:var(--sh);text-align:center">
+        <p style="font-size:13px;color:var(--t2);margin-bottom:12px">Best deal found — buy directly</p>
+        <button onclick="window.open('${stores[0].link}','_blank')" style="background:var(--green);border:none;border-radius:var(--r);padding:16px 32px;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;width:100%">
+          Buy for $${stores[0].price.toFixed(2)} at ${stores[0].name} →
+        </button>
+      </div>`;
+  } catch(err){
+    detail.innerHTML = `
+      <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
+      <div class="empty"><p>Could not load prices. Please try again.</p></div>`;
+  }
+}
+
+// === WATCHLIST ===
+const WATCHLIST = [
+  {name:'MacBook Air M3',emoji:'💻',target:999,current:1099},
+  {name:'Sony WH-1000XM5',emoji:'🎧',target:249,current:278},
+];
+function renderWatchlist(){
+  document.getElementById('watchlist-items').innerHTML = WATCHLIST.map(w=>`
+    <div class="wi">
+      <div class="we">${w.emoji}</div>
+      <div class="wii"><div class="wn">${w.name}</div><div class="wt">Alert below $${w.target}</div></div>
+      <div class="wpr ${w.current<=w.target?'hit':''}">${w.current<=w.target?'🎉 ':''}$${w.current}</div>
     </div>`).join('');
 }
 
-function addTemplate(){document.getElementById('tmpl-form-card').style.display='block';}
-function saveTemplate(){
-  const trigger=document.getElementById('tmpl-trigger').value.trim();
-  const response=document.getElementById('tmpl-response').value.trim();
-  if(!trigger||!response)return;
-  templates.push({trigger,response});
-  localStorage.setItem('templates',JSON.stringify(templates));
-  document.getElementById('tmpl-trigger').value='';
-  document.getElementById('tmpl-response').value='';
-  document.getElementById('tmpl-form-card').style.display='none';
-  renderTemplates();
+// === PREMIUM ===
+function selectPlan(p,el){
+  document.querySelectorAll('.plan').forEach(e=>e.classList.remove('pop'));
+  el.classList.add('pop');
+  document.getElementById('sub-btn').textContent = p==='yearly'?'Start free trial — $2.99/mo':'Start free trial — $4.99/mo';
 }
-function deleteTemplate(i){templates.splice(i,1);localStorage.setItem('templates',JSON.stringify(templates));renderTemplates();}
+function isPremium(){ return localStorage.getItem('premium')==='true'; }
+function subscribe(){
+  showToast('Connecting to payment...');
+  setTimeout(()=>{ localStorage.setItem('premium','true'); showToast('Premium activated!'); }, 1500);
+}
+function renderProfile(){
+  document.getElementById('profile-plan').textContent = isPremium() ? 'Premium member' : 'Free plan';
+}
 
-// === DEMO ===
-function updateDemo(){
-  const url=window.location.origin+'/demo';
-  document.getElementById('demo-url').textContent=url;
-  document.getElementById('widget-code').textContent=`<script src="${window.location.origin}/widget.js" data-config="default"><\/script>`;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
-function copyDemo(){navigator.clipboard.writeText(window.location.origin+'/demo').then(()=>alert(lang==='pl'?'Skopiowano!':'Copied!'));}
-function shareDemo(){
-  if(navigator.share){navigator.share({title:'AI Asystent',url:window.location.origin+'/demo'});}
-  else{copyDemo();}
-}
-function openDemo(){window.open(window.location.origin+'/demo','_blank');}
-function copyWidget(){navigator.clipboard.writeText(document.getElementById('widget-code').textContent).then(()=>alert('Skopiowano!'));}
 
-// === INIT ===
 window.onload=()=>{
-  setLang(lang);
-  document.getElementById('demo-url').textContent=window.location.origin+'/demo';
-  document.getElementById('widget-code').textContent=`<script src="${window.location.origin}/widget.js" data-config="default"><\/script>`;
+  loadDeals('best deals today');
+  renderWatchlist();
 };
 </script>
 </body>
